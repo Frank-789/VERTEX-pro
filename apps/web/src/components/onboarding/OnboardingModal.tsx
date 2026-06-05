@@ -10,7 +10,7 @@ const budgetLevels = ['< 1万', '1-5万', '5-20万', '20-50万', '> 50万']
 const riskLevels = ['保守型', '稳健型', '进取型']
 const platformOptions = ['淘宝', '京东', '拼多多', '1688', 'eBay']
 
-const riskDescriptions = {
+const riskDescriptions: Record<string, string> = {
   '保守型': '优先保本，接受低回报，不追求高增长',
   '稳健型': '可承受小幅亏损，追求稳定回报',
   '进取型': '可承受较大风险，追求高增长机会',
