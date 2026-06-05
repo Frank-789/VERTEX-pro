@@ -91,7 +91,64 @@ function ToolCallCapsule({ call }: { call: ToolCall }) {
   )
 }
 
+const REPORT_HEADERS = ['结论先行', '一、', '二、', '三、', '四、', '五、', '六、', '核心判断', '关键依据', '风险提醒', '可执行建议']
+
+function isReportContent(text: string): boolean {
+  if (text.length < 200) return false
+  return REPORT_HEADERS.some(h => text.includes(h))
+}
+
+function isTitleLine(line: string): boolean {
+  const trimmed = line.trim()
+  if (!trimmed) return false
+  if (/^[一二三四五六]、/.test(trimmed)) return true
+  if (/^结论先行/.test(trimmed)) return true
+  if (/^【[^】]+】/.test(trimmed)) return true
+  return false
+}
+
+function ReportContent({ text }: { text: string }) {
+  const blocks = text.split(/\n\n+/)
+  return (
+    <div className="space-y-5">
+      {blocks.map((block, bi) => {
+        const lines = block.split('\n').filter(l => l.trim())
+        if (lines.length === 0) return null
+
+        const firstLine = lines[0].trim()
+
+        // Block with title line as first line
+        if (isTitleLine(firstLine)) {
+          return (
+            <div key={bi} className="space-y-1.5">
+              <h3 className="text-base font-semibold text-foreground">{firstLine}</h3>
+              {lines.slice(1).map((line, li) => (
+                <p key={li} className="text-sm text-foreground leading-relaxed">{line.trim()}</p>
+              ))}
+            </div>
+          )
+        }
+
+        // Regular block
+        return (
+          <div key={bi} className="space-y-1.5">
+            {lines.map((line, li) => {
+              const trimmed = line.trim()
+              if (/^(可信度|数据来源)/.test(trimmed)) {
+                return <p key={li} className="text-xs text-muted">{trimmed}</p>
+              }
+              return <p key={li} className="text-sm text-foreground leading-relaxed">{trimmed}</p>
+            })}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 function MessageBubble({ message }: { message: Message }) {
+  const isReport = message.role === 'assistant' && isReportContent(message.content)
+
   return (
     <div className={cn(
       'flex gap-4 animate-fade-in',
@@ -104,17 +161,25 @@ function MessageBubble({ message }: { message: Message }) {
       )}
 
       <div className={cn(
-        'max-w-[80%] space-y-3',
+        isReport ? 'flex-1 max-w-3xl space-y-3' : 'max-w-[80%] space-y-3',
         message.role === 'user' && 'order-first'
       )}>
-        <div className={cn(
-          'rounded-2xl px-4 py-3 text-sm leading-relaxed',
-          message.role === 'user'
-            ? 'bg-primary/10 text-foreground rounded-br-md'
-            : 'bg-surface border border-border rounded-bl-md'
-        )}>
-          <div className="whitespace-pre-wrap">{message.content}</div>
-        </div>
+        {isReport ? (
+          // Report mode: no rounded bubble border, clean report style
+          <div className="bg-surface rounded-xl px-5 py-4">
+            <ReportContent text={message.content} />
+          </div>
+        ) : (
+          // Bubble mode: rounded bubble for short/user messages
+          <div className={cn(
+            'rounded-2xl px-4 py-3 text-sm leading-relaxed',
+            message.role === 'user'
+              ? 'bg-primary/10 text-foreground rounded-br-md'
+              : 'bg-surface border border-border rounded-bl-md'
+          )}>
+            <div className="whitespace-pre-wrap">{message.content}</div>
+          </div>
+        )}
 
         {message.toolCalls && message.toolCalls.length > 0 && (
           <div className="space-y-1.5">
