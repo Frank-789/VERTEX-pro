@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: vertex-api
+    env: docker
+    repo: https://github.com/your-username/vertex
+    branch: main
+    rootDir: apps/api
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: DEEPSEEK_BASE_URL
+        value: https://api.deepseek.com
+      - key: DEEPSEEK_MODEL
+        value: deepseek-chat
+      - key: ENVIRONMENT
+        value: production
+      - key: ALLOWED_ORIGINS
+        value: https://vertex-ai.vercel.app
+      - key: PORT
+        value: "8000"

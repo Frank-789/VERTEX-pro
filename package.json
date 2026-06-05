@@ -1,0 +1,11 @@
+{
+  "name": "vertex",
+  "private": true,
+  "description": "Vertex - AI电商经营智能体",
+  "scripts": {
+    "dev:web": "cd apps/web && npm run dev",
+    "dev:api": "cd apps/api && source .venv/bin/activate && uvicorn src.main:app --reload --port 8000",
+    "build:web": "cd apps/web && npm run build",
+    "start:api": "cd apps/api && uvicorn src.main:app --host 0.0.0.0 --port 8000"
+  }
+}

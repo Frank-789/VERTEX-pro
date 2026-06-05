@@ -1,0 +1,14 @@
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.6.0
+python-multipart>=0.0.9
+httpx>=0.28.0
+sse-starlette>=3.0.0
+python-dotenv>=1.0.0
+pandas>=2.2.0
+openpyxl>=3.1.0
+python-docx>=1.1.0
+pdfplumber>=0.10.0
+requests>=2.31.0
+aiofiles>=23.2.0
+playwright>=1.50.0
