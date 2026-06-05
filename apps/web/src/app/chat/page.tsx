@@ -301,7 +301,7 @@ function ChatContent() {
       console.error('Chat error:', err)
 
       // Update the assistant message with error
-      const errorMsg = accumulated => accumulated
+      const errorMsg = (accumulated: string) => accumulated
         ? `\n\n⚠️ 连接服务器失败，已显示缓存结果。\n> 提示：请确保后端服务已启动`
         : `⚠️ 连接服务器失败。请确认后端 API 服务已启动。\n> 提示：在终端中运行 \`cd apps/api && uvicorn src.main:app --reload --port 8000\``
 
