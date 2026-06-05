@@ -202,6 +202,8 @@ function ChatContent() {
       timestamp: Date.now(),
     })
 
+    let accumulatedContent = ''
+
     try {
       const response = await fetch(`${API_URL}/chat`, {
         method: 'POST',
@@ -229,7 +231,6 @@ function ChatContent() {
 
       const decoder = new TextDecoder()
       let buffer = ''
-      let accumulatedContent = ''
       const activeToolCalls: ToolCall[] = []
 
       while (true) {
