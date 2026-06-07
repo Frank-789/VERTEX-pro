@@ -13,9 +13,13 @@ services:
         value: https://api.deepseek.com
       - key: DEEPSEEK_MODEL
         value: deepseek-chat
+      - key: KIMI_API_KEY
+        sync: false
+      - key: KIMI_BASE_URL
+        value: https://api.moonshot.cn
       - key: ENVIRONMENT
         value: production
       - key: ALLOWED_ORIGINS
-        value: https://vertex-ai.vercel.app
+        sync: false
       - key: PORT
         value: "8000"
