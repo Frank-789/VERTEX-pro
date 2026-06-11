@@ -10,6 +10,7 @@
 | **Market Lab** | 数据分析工作台，查询历史、数据对比、图表、导出 |
 | **Creative Studio** | 电商主图套件：白底/场景/卖点/对比/详情首屏 + Listing文案 |
 | **Store Pilot** | 售中监控Demo：库存预警、差评提醒、清货建议看板 |
+| **Data Crawler** | 数据采集工作台：多平台商品搜索、价格监控、评论抓取、货源扫描 |
 | **Settings** | 商家画像：资金安全线计算、经营偏好配置 |
 
 ## 技术栈
@@ -75,6 +76,19 @@ DEEPSEEK_MODEL=deepseek-chat
 PORT=8000
 ENVIRONMENT=development
 ALLOWED_ORIGINS=http://localhost:3000
+
+# === Data Crawler ===
+# Oxylabs API (1688, SHEIN 采集)
+OXYLABS_USERNAME=
+OXYLABS_PASSWORD=
+OXYLABS_API_URL=https://realtime.oxylabs.io/v1/queries
+
+# Apify Token (扩展平台采集)
+APIFY_TOKEN=
+APIFY_DEFAULT_ACTOR=
+
+# eBay API (商品搜索)
+EBAY_API_KEY=
 ```
 
 ### 前端 (apps/web/.env.local)
@@ -102,6 +116,8 @@ NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
 3. 设置 Root Directory: `apps/api`
 4. 配置环境变量 `DEEPSEEK_API_KEY`
 
+> **注意**：为 Data Crawler 配置采集凭证后，才可以执行真实数据采集。未配置凭证的平台（缺少对应环境变量）会显示"需配置"状态，不会返回假数据冒充真实采集。
+
 ## 项目结构
 
 ```
@@ -118,6 +134,7 @@ vertex/
 │           ├── ai/       # DeepSeek + 分析引擎
 │           ├── api/      # API 端点
 │           ├── tools/    # 平台数据采集工具
+│           ├── crawler/  # 数据采集工作台（平台注册 + 适配器）
 │           ├── knowledge/ # 知识库 RAG
 │           └── image/    # 图片生成
 ├── render.yaml           # Render 部署配置

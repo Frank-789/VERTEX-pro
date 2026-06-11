@@ -8,6 +8,7 @@ import {
   Image,
   LayoutDashboard,
   Settings,
+  Database,
   ChevronLeft,
   ChevronRight,
   Sparkles,
@@ -20,6 +21,7 @@ const navItems = [
   { name: 'Market Lab', href: '/market-lab', icon: BarChart3 },
   { name: 'Creative Studio', href: '/creative-studio', icon: Image },
   { name: 'Store Pilot', href: '/store-pilot', icon: LayoutDashboard },
+  { name: 'Data Crawler', href: '/data-crawler', icon: Database },
   { name: 'Settings', href: '/settings', icon: Settings },
 ]
 

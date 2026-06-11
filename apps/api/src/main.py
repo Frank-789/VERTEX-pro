@@ -11,6 +11,7 @@ load_dotenv()
 from api.chat import router as chat_router
 from api.tools import router as tools_router
 from api.creative import router as creative_router
+from api.crawler import router as crawler_router
 
 app = FastAPI(
     title="Vertex AI API",
@@ -32,6 +33,7 @@ app.add_middleware(
 app.include_router(chat_router, prefix="/api/v1")
 app.include_router(tools_router, prefix="/api/v1/tools")
 app.include_router(creative_router, prefix="/api/v1")
+app.include_router(crawler_router, prefix="/api/v1/crawler")
 
 @app.get("/")
 async def root():
