@@ -78,7 +78,9 @@ class CrawlerRegistry:
         TASK_STORE[task.id] = task
 
         try:
-            results = await adapter.crawl(keyword=keyword, max_items=kwargs.get("max_items", 20), **kwargs)
+            # Filter out already-explicitly-passed params from kwargs
+            crawl_kwargs = {k: v for k, v in kwargs.items() if k not in ("keyword", "max_items")}
+            results = await adapter.crawl(keyword=keyword, max_items=kwargs.get("max_items", 20), **crawl_kwargs)
             task.results = results
             task.items_count = len(results)
             task.status = TaskStatus.SUCCESS
@@ -126,6 +128,7 @@ def get_registry() -> CrawlerRegistry:
 def _register_default_platforms(registry: CrawlerRegistry):
     """Register all built-in platforms"""
     from .adapters.oxylabs import Oxylabs1688Adapter, OxylabsSheinAdapter
+    from .adapters.oxylabs_amazon import OxylabsAmazonAdapter
     from .adapters.apify import ApifyAdapter
     from .adapters.ebay_existing import EbayCrawlerAdapter
     from .adapters.manual_browser import ManualBrowserAdapter
@@ -150,6 +153,27 @@ def _register_default_platforms(registry: CrawlerRegistry):
         risk_hints=["依赖第三方商业 API"],
         data_sources=["Oxylabs 商业爬虫 API"],
     ), Oxylabs1688Adapter())
+
+    # Amazon via Oxylabs
+    registry.register("amazon", CrawlerPlatform(
+        id="amazon",
+        name="Amazon",
+        status=PlatformStatus.NEEDS_CONFIG,
+        source_type=SourceType.OXYLABS,
+        capabilities=[
+            CrawlerCapability("商品搜索", True, "通过关键词搜索 Amazon 商品"),
+            CrawlerCapability("商品详情", True, "抓取商品详情页"),
+            CrawlerCapability("价格", True, "采集价格信息"),
+            CrawlerCapability("销量", True, "销量排行数据"),
+            CrawlerCapability("评论", True, "评论数和评分"),
+            CrawlerCapability("店铺信息", True, "卖家信息"),
+        ],
+        required_env=["OXYLABS_USERNAME", "OXYLABS_PASSWORD"],
+        limitations=["需要商业 Oxylabs API 凭证", "免费账号可能不返回抓取内容"],
+        recommended_for_production=False,
+        risk_hints=["依赖第三方商业 API"],
+        data_sources=["Oxylabs 商业爬虫 API"],
+    ), OxylabsAmazonAdapter())
 
     # SHEIN via Oxylabs
     registry.register("shein", CrawlerPlatform(
