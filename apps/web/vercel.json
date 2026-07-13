@@ -4,6 +4,6 @@
   "outputDirectory": ".next",
   "installCommand": "npm install",
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://vertex-api.onrender.com/api/v1"
+    "NEXT_PUBLIC_API_URL": "https://vertex-pro.onrender.com/api/v1"
   }
 }
